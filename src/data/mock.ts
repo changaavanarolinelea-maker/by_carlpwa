@@ -69,3 +69,36 @@ export const projetsPersonnels: ProjetPersonnel[] = [
     statut: "reporter",
   },
 ];
+
+export const capitalTotal = 124500;
+export const profitGlobalPourcent = 18.4;
+
+export const businessProjets: BusinessProjet[] = [
+  {
+    id: "sacs",
+    nom: "Sacs",
+    capitalInvesti: 45000,
+    profitPrevu: 12200,
+    stockRestantPourcent: 84,
+    vitesseVente: 3,
+    statut: "lancable",
+  },
+  {
+    id: "chaussures",
+    nom: "Chaussures",
+    capitalInvesti: 62000,
+    profitPrevu: 18500,
+    stockRestantPourcent: 12,
+    vitesseVente: 5,
+    statut: "presque",
+  },
+  {
+    id: "parfums",
+    nom: "Parfums",
+    capitalInvesti: 17500,
+    profitPrevu: 4200,
+    stockRestantPourcent: 0,
+    vitesseVente: 0,
+    statut: "attente",
+  },
+];

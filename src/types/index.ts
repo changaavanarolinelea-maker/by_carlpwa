@@ -37,3 +37,15 @@ export type ProjetPersonnel = {
   prevuLe: string;
   statut: StatutProjet;
 };
+
+export type StatutBusiness = "lancable" | "presque" | "attente";
+
+export type BusinessProjet = {
+  id: string;
+  nom: string;
+  capitalInvesti: number;
+  profitPrevu: number;
+  stockRestantPourcent: number;
+  vitesseVente: number; // de 0 à 5
+  statut: StatutBusiness;
+};
