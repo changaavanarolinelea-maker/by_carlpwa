@@ -39,3 +39,33 @@ export const transactionsRecentes: Transaction[] = [
 export function formatFCFA(montant: number): string {
   return `${montant.toLocaleString("fr-FR")} FCFA`;
 }
+
+export const projetsPersonnels: ProjetPersonnel[] = [
+  {
+    id: "baskets",
+    nom: "Baskets",
+    objectif: 10000,
+    epargne: 10000,
+    priorite: "haute",
+    prevuLe: "15 Oct.",
+    statut: "pret",
+  },
+  {
+    id: "parfum",
+    nom: "Parfum",
+    objectif: 8500,
+    epargne: 4500,
+    priorite: "moyenne",
+    prevuLe: "20 Nov.",
+    statut: "ralentit",
+  },
+  {
+    id: "telephone",
+    nom: "Téléphone",
+    objectif: 120000,
+    epargne: 15000,
+    priorite: "basse",
+    prevuLe: "Jan. 2027",
+    statut: "reporter",
+  },
+];

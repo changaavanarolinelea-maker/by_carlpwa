@@ -25,3 +25,15 @@ export type Transaction = {
   montant: number;
   sens: "entree" | "sortie";
 };
+
+export type StatutProjet = "pret" | "ralentit" | "reporter";
+
+export type ProjetPersonnel = {
+  id: string;
+  nom: string;
+  objectif: number;
+  epargne: number;
+  priorite: "haute" | "moyenne" | "basse";
+  prevuLe: string;
+  statut: StatutProjet;
+};
