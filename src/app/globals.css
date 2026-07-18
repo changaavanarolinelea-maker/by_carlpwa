@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Couleurs — charte graphique By_Carl */
+  --color-cream: #FFF8F2;
+  --color-ivory: #FFFDFC;
+  --color-espresso: #2B1B16;
+  --color-cocoa: #5A382B;
+  --color-terracotta: #B86648;
+  --color-sand: #EAD8C7;
+  --color-sage: #5D7A65;
+  --color-ochre: #A66A28;
+  --color-brick: #A94F45;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Polices */
+  --font-display: var(--font-playfair);
+  --font-sans: var(--font-inter);
+
+  /* Arrondis */
+  --radius-card: 1.5rem;
+  --radius-control: 1rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-espresso);
 }
