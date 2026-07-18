@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { formatFCFA } from "@/data/mock";
 import type { BusinessProjet } from "@/types";
+import Link from "next/link";
 
 const statutConfig = {
   lancable: { variant: "success" as const, label: "Projet lançable maintenant" },
@@ -13,7 +14,7 @@ export function BusinessCard({ projet }: { projet: BusinessProjet }) {
   const { variant, label } = statutConfig[projet.statut];
 
   return (
-    <Card>
+    <Link href={`/business/${projet.id}`}>
       <div className="flex justify-between items-start mb-3">
         <h3 className="font-display text-headline-sm text-espresso">{projet.nom}</h3>
         <Badge variant={variant}>{label}</Badge>
@@ -53,6 +54,6 @@ export function BusinessCard({ projet }: { projet: BusinessProjet }) {
           </div>
         </div>
       </div>
-    </Card>
+    </Link>
   );
 }

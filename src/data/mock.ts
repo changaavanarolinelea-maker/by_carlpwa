@@ -102,3 +102,39 @@ export const businessProjets: BusinessProjet[] = [
     statut: "attente",
   },
 ];
+
+export const businessDetails: Record<string, BusinessDetail> = {
+  sacs: {
+    nom: "Vente de sacs",
+    investissementInitial: 100000,
+    categorie: "Luxe",
+    produits: [
+      { id: "modele-a", nom: "Sac modèle A", prixVente: 20000, stockRestant: 12, stockInitial: 48 },
+      { id: "modele-b", nom: "Sac modèle B — Édition limitée", prixVente: 35000, stockRestant: 8, stockInitial: 20 },
+    ],
+    ventes: [
+      { id: "v1", produitNom: "Vente Modèle A", montant: 20000, date: "Il y a 2 heures" },
+      { id: "v2", produitNom: "Vente Modèle B", montant: 35000, date: "Hier, 18:45" },
+    ],
+  },
+  chaussures: {
+    nom: "Vente de chaussures",
+    investissementInitial: 62000,
+    categorie: "Sport",
+    produits: [
+      { id: "paire-a", nom: "Paire modèle Runner", prixVente: 15000, stockRestant: 4, stockInitial: 30 },
+    ],
+    ventes: [
+      { id: "v1", produitNom: "Vente Runner", montant: 15000, date: "Ce matin" },
+    ],
+  },
+  parfums: {
+    nom: "Vente de parfums",
+    investissementInitial: 17500,
+    categorie: "Beauté",
+    produits: [
+      { id: "flacon-a", nom: "Flacon 50ml", prixVente: 6000, stockRestant: 0, stockInitial: 15 },
+    ],
+    ventes: [],
+  },
+};

@@ -49,3 +49,26 @@ export type BusinessProjet = {
   vitesseVente: number; // de 0 à 5
   statut: StatutBusiness;
 };
+
+export type Produit = {
+  id: string;
+  nom: string;
+  prixVente: number;
+  stockRestant: number;
+  stockInitial: number;
+};
+
+export type Vente = {
+  id: string;
+  produitNom: string;
+  montant: number;
+  date: string;
+};
+
+export type BusinessDetail = {
+  nom: string;
+  investissementInitial: number;
+  categorie: string;
+  produits: Produit[];
+  ventes: Vente[];
+};
