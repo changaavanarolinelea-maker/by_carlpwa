@@ -72,3 +72,13 @@ export type BusinessDetail = {
   produits: Produit[];
   ventes: Vente[];
 };
+
+export type DepenseJournaliere = {
+  jour: string;
+  pourcentage: number;
+};
+
+export type ConseilAnalyse = {
+  message: string;
+  type: "positif" | "attention";
+};

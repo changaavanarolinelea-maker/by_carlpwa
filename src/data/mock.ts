@@ -138,3 +138,22 @@ export const businessDetails: Record<string, BusinessDetail> = {
     ventes: [],
   },
 };
+
+export const profitMensuel = 60000;
+export const profitVariationPourcent = 12;
+
+export const depensesSemaine: DepenseJournaliere[] = [
+  { jour: "Lun", pourcentage: 40 },
+  { jour: "Mar", pourcentage: 65 },
+  { jour: "Mer", pourcentage: 50 },
+  { jour: "Jeu", pourcentage: 85 },
+  { jour: "Ven", pourcentage: 45 },
+];
+
+export const conseilsAnalyse: ConseilAnalyse[] = [
+  { message: "Ton business marche bien : tes ventes progressent.", type: "positif" },
+  {
+    message: "Réduis les dépenses plaisir pour atteindre ton prochain projet plus vite.",
+    type: "attention",
+  },
+];
