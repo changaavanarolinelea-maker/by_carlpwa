@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { formatFCFA } from "@/data/mock";
+import { formatFCFA } from "@/lib/format";
 import type { ProjetPersonnel } from "@/types";
 
 const statutConfig = {

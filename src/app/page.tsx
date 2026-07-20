@@ -1,19 +1,17 @@
-import { PiggyBank, TrendingUp, Banknote, Plus, ShoppingBag, Package, ArrowDownLeft } from "lucide-react";
+"use client";
+
+import Link from "next/link";
+import { PiggyBank, TrendingUp, Banknote, Plus, ShoppingBag, Package, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import {
-  compte,
-  conseilDuJour,
-  projetPersonnelApercu,
-  businessApercu,
-  transactionsRecentes,
-  formatFCFA,
-} from "@/data/mock";
+import { useAppData } from "@/context/AppDataContext";
+import { formatFCFA } from "@/lib/format";
+import { conseilDuJour, projetPersonnelApercu, businessApercu } from "@/data/mock";
 
 export default function AccueilPage() {
+  const { compte, transactions } = useAppData();
   const tauxStock =
     (businessApercu.vendus / (businessApercu.vendus + businessApercu.restants)) * 100;
 
@@ -24,9 +22,7 @@ export default function AccueilPage() {
       <div className="px-5 space-y-6">
         {/* Argent disponible */}
         <Card>
-          <p className="font-sans text-label-md text-cocoa uppercase mb-1">
-            Argent disponible
-          </p>
+          <p className="font-sans text-label-md text-cocoa uppercase mb-1">Argent disponible</p>
           <h2 className="font-display text-display-lg-mobile text-espresso mb-6">
             {formatFCFA(compte.argentDisponible)}
           </h2>
@@ -46,9 +42,9 @@ export default function AccueilPage() {
         {/* Conseil du jour */}
         <div className="bg-espresso rounded-card p-6 flex items-center justify-between">
           <div className="space-y-2 max-w-[70%]">
-            <Badge variant="neutral" className="bg-terracotta/20 text-cream">
+            <span className="inline-block px-3 py-1 rounded-full bg-terracotta/20 text-cream font-sans text-label-md">
               Conseil du jour
-            </Badge>
+            </span>
             <p className="font-display text-headline-sm text-cream leading-tight">
               {conseilDuJour.message}
             </p>
@@ -60,12 +56,16 @@ export default function AccueilPage() {
 
         {/* Actions rapides */}
         <div className="flex gap-4">
-          <Button variant="primary" icon={<Banknote size={20} />} className="flex-1">
-            Vendre maintenant
-          </Button>
-          <Button variant="secondary" icon={<Plus size={20} />} className="flex-1">
-            Ajouter de l&apos;argent
-          </Button>
+          <Link href="/ajouter" className="flex-1">
+            <Button variant="primary" icon={<Banknote size={20} />} className="w-full">
+              Vendre maintenant
+            </Button>
+          </Link>
+          <Link href="/ajouter" className="flex-1">
+            <Button variant="secondary" icon={<Plus size={20} />} className="w-full">
+              Ajouter de l&apos;argent
+            </Button>
+          </Link>
         </div>
 
         {/* Aperçus projets */}
@@ -75,9 +75,7 @@ export default function AccueilPage() {
               <div className="w-8 h-8 rounded-full bg-cream flex items-center justify-center mb-4">
                 <ShoppingBag size={18} className="text-cocoa" strokeWidth={1.5} />
               </div>
-              <p className="font-sans text-label-md text-espresso">
-                {projetPersonnelApercu.nom}
-              </p>
+              <p className="font-sans text-label-md text-espresso">{projetPersonnelApercu.nom}</p>
             </div>
             <p className="font-display text-headline-sm text-terracotta">
               {formatFCFA(projetPersonnelApercu.montant)}
@@ -112,22 +110,34 @@ export default function AccueilPage() {
             <button className="font-sans text-label-md text-cocoa">Voir tout</button>
           </div>
           <div className="space-y-1">
-            {transactionsRecentes.map((transaction) => (
+            {transactions.length === 0 && (
+              <p className="py-4 font-sans text-body-sm text-cocoa">Aucune transaction pour l&apos;instant.</p>
+            )}
+            {transactions.slice(0, 5).map((transaction) => (
               <div
                 key={transaction.id}
                 className="flex items-center justify-between py-4 border-b border-sand"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-cream flex items-center justify-center">
-                    <ArrowDownLeft size={18} className="text-cocoa" strokeWidth={1.5} />
+                    {transaction.sens === "sortie" ? (
+                      <ArrowUpRight size={18} className="text-brick" strokeWidth={1.5} />
+                    ) : (
+                      <ArrowDownLeft size={18} className="text-sage" strokeWidth={1.5} />
+                    )}
                   </div>
                   <div>
                     <p className="font-sans text-label-md text-espresso">{transaction.titre}</p>
                     <p className="font-sans text-body-sm text-cocoa">{transaction.date}</p>
                   </div>
                 </div>
-                <p className="font-sans text-label-md text-terracotta">
-                  +{formatFCFA(transaction.montant)}
+                <p
+                  className={`font-sans text-label-md ${
+                    transaction.sens === "sortie" ? "text-brick" : "text-sage"
+                  }`}
+                >
+                  {transaction.sens === "sortie" ? "-" : "+"}
+                  {formatFCFA(transaction.montant)}
                 </p>
               </div>
             ))}

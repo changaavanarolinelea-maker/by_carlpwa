@@ -4,6 +4,11 @@ import type {
   ProjetPersonnelApercu,
   BusinessApercu,
   Transaction,
+  ProjetPersonnel,
+  BusinessProjet,
+  BusinessDetail,
+  DepenseJournaliere,
+  ConseilAnalyse,
 } from "@/types";
 
 export const compte: Compte = {
@@ -35,10 +40,6 @@ export const transactionsRecentes: Transaction[] = [
     sens: "entree",
   },
 ];
-
-export function formatFCFA(montant: number): string {
-  return `${montant.toLocaleString("fr-FR")} FCFA`;
-}
 
 export const projetsPersonnels: ProjetPersonnel[] = [
   {

@@ -1,7 +1,9 @@
 import { Header } from "@/components/layout/Header";
 import { Card } from "@/components/ui/Card";
 import { BusinessCard } from "@/components/features/BusinessCard";
-import { businessProjets, capitalTotal, profitGlobalPourcent, formatFCFA } from "@/data/mock";
+import { businessProjets, capitalTotal, profitGlobalPourcent , } from "@/data/mock";
+import { formatFCFA } from "@/lib/format";
+
 
 export default function BusinessPage() {
   return (

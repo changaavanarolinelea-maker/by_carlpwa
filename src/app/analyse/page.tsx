@@ -6,8 +6,9 @@ import {
   profitVariationPourcent,
   depensesSemaine,
   conseilsAnalyse,
-  formatFCFA,
 } from "@/data/mock";
+import { formatFCFA } from "@/lib/format";
+
 
 const conseilStyle = {
   positif: { border: "border-sage", iconBg: "bg-sage/10", iconColor: "text-sage", icon: Sparkles },

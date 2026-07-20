@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowDownCircle, ArrowUpCircle, PiggyBank, Tag } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/Button";
+import { useAppData } from "@/context/AppDataContext";
 
 type NatureFlux = "entree" | "depense" | "epargne" | "vente";
 
@@ -18,9 +20,17 @@ export default function AjouterPage() {
   const [montant, setMontant] = useState("");
   const [nature, setNature] = useState<NatureFlux>("entree");
   const [note, setNote] = useState("");
+  const { ajouterTransaction } = useAppData();
+  const router = useRouter();
 
   function handleConfirmer() {
-    console.log({ montant, nature, note });
+    const montantNombre = Number(montant);
+    if (!montantNombre || montantNombre <= 0) {
+      return;
+    }
+
+    ajouterTransaction(nature, montantNombre, note);
+    router.push("/");
   }
 
   return (
@@ -71,10 +81,7 @@ export default function AjouterPage() {
         </div>
 
         <div>
-          <label
-            htmlFor="note"
-            className="font-sans text-label-md text-cocoa uppercase mb-2 block"
-          >
+          <label htmlFor="note" className="font-sans text-label-md text-cocoa uppercase mb-2 block">
             Note / description
           </label>
           <textarea

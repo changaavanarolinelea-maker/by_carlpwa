@@ -3,7 +3,9 @@ import { ArrowLeft, ShoppingBag, Banknote, TrendingUp } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { businessDetails, formatFCFA } from "@/data/mock";
+import { businessDetails} from "@/data/mock";
+import { formatFCFA } from "@/lib/format";
+
 
 export default async function BusinessDetailPage({
   params,
