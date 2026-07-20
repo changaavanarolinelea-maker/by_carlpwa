@@ -1,10 +1,15 @@
+"use client";
+
+import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/Button";
 import { ProjetPersonnelCard } from "@/components/features/ProjetPersonnelCard";
-import { projetsPersonnels } from "@/data/mock";
+import { useAppData } from "@/context/AppDataContext";
 
 export default function ProjetsPage() {
+  const { projetsPersonnels } = useAppData();
+
   return (
     <div>
       <Header />
@@ -15,9 +20,15 @@ export default function ProjetsPage() {
           <h2 className="font-display text-headline-md text-espresso">Projets Personnels</h2>
         </div>
 
-        <Button variant="primary" icon={<Plus size={20} />} className="w-full">
-          Nouveau Projet Personnel
-        </Button>
+        <Link href="/projets/nouveau">
+          <Button variant="primary" icon={<Plus size={20} />} className="w-full">
+            Nouveau Projet Personnel
+          </Button>
+        </Link>
+
+        {projetsPersonnels.length === 0 && (
+          <p className="font-sans text-body-sm text-cocoa">Aucun projet pour l&apos;instant.</p>
+        )}
 
         <div className="space-y-4">
           {projetsPersonnels.map((projet) => (
