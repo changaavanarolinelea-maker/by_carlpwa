@@ -73,18 +73,18 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     });
   }
 
-  function ajouterProjetPersonnel(projet: Omit<ProjetPersonnel, "id" | "statut">) {
-    setData((precedent) => {
-      if (!precedent) return precedent;
-      return {
-        ...precedent,
-        projetsPersonnels: [
-          ...precedent.projetsPersonnels,
-          { ...projet, id: crypto.randomUUID(), statut: "reporter" },
-        ],
-      };
-    });
-  }
+function ajouterProjetPersonnel(projet: Omit<ProjetPersonnel, "id">) {
+  setData((precedent) => {
+    if (!precedent) return precedent;
+    return {
+      ...precedent,
+      projetsPersonnels: [
+        ...precedent.projetsPersonnels,
+        { ...projet, id: crypto.randomUUID() },
+      ],
+    };
+  });
+}
 
   function ajouterBusiness(input: { nom: string; capitalInvesti: number; categorie: string }) {
     setData((precedent) => {

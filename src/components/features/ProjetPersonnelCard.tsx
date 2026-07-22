@@ -1,7 +1,11 @@
+"use client";
+
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { formatFCFA } from "@/lib/format";
+import { calculerStatutProjet } from "@/lib/projets";
+import { useAppData } from "@/context/AppDataContext";
 import type { ProjetPersonnel } from "@/types";
 
 const statutConfig = {
@@ -20,9 +24,12 @@ const statutConfig = {
 };
 
 export function ProjetPersonnelCard({ projet }: { projet: ProjetPersonnel }) {
+  const { compte } = useAppData();
+
   const reste = projet.objectif - projet.epargne;
   const progression = (projet.epargne / projet.objectif) * 100;
-  const { variant, message } = statutConfig[projet.statut];
+  const statut = calculerStatutProjet(projet, compte.argentDisponible);
+  const { variant, message } = statutConfig[statut];
 
   return (
     <Card>
@@ -46,7 +53,7 @@ export function ProjetPersonnelCard({ projet }: { projet: ProjetPersonnel }) {
           Économisé : <span className="text-espresso font-semibold">{formatFCFA(projet.epargne)}</span>
         </p>
         <p className="font-sans text-body-sm text-cocoa">
-          Reste : <span className="text-espresso font-semibold">{formatFCFA(reste)}</span>
+          Reste : <span className="text-espresso font-semibold">{formatFCFA(Math.max(reste, 0))}</span>
         </p>
       </div>
       <ProgressBar value={progression} className="mb-4" />

@@ -20,18 +20,20 @@ export default function AjouterPage() {
   const [montant, setMontant] = useState("");
   const [nature, setNature] = useState<NatureFlux>("entree");
   const [note, setNote] = useState("");
-  const { ajouterTransaction } = useAppData();
+  const [enCours, setEnCours] = useState(false);
+  const { ajouterTransaction , compte } = useAppData();
   const router = useRouter();
+  const montantNombre = Number(montant);
+  const estUneSortie = nature === "depense" || nature === "epargne";
+  const soldeInsuffisant = estUneSortie && montantNombre > compte.argentDisponible;
+  const formulaireValide = montantNombre > 0 && !soldeInsuffisant;
 
-  function handleConfirmer() {
-    const montantNombre = Number(montant);
-    if (!montantNombre || montantNombre <= 0) {
-      return;
-    }
-
-    ajouterTransaction(nature, montantNombre, note);
-    router.push("/");
-  }
+function handleConfirmer() {
+  if (!formulaireValide || enCours) return;
+  setEnCours(true);
+  ajouterTransaction(nature, montantNombre, note);
+  router.push("/");
+}
 
   return (
     <div>
@@ -93,10 +95,21 @@ export default function AjouterPage() {
             className="w-full bg-ivory border border-sand rounded-control p-4 font-sans text-body-md text-espresso outline-none focus:border-terracotta placeholder:text-cocoa/50"
           />
         </div>
-
-        <Button variant="primary" onClick={handleConfirmer} className="w-full">
-          Confirmer
-        </Button>
+        <div>
+           <Button
+             variant="primary"
+             onClick={handleConfirmer}
+             disabled={!formulaireValide || enCours}
+             className="w-full"
+            >
+            Confirmer
+          </Button>
+            {soldeInsuffisant && (
+          <p className="font-sans text-body-sm text-brick mt-3 text-center">
+           Solde insuffisant : il te reste {compte.argentDisponible.toLocaleString("fr-FR")} FCFA disponible.
+          </p>
+          )}
+        </div>    
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ export default function NouveauProduitPage() {
   const [nom, setNom] = useState("");
   const [prixVente, setPrixVente] = useState("");
   const [stockInitial, setStockInitial] = useState("");
+  const [enCours, setEnCours] = useState(false);
   const { ajouterProduit } = useAppData();
   const router = useRouter();
 
@@ -19,8 +20,9 @@ export default function NouveauProduitPage() {
   const formulaireValide = nom.trim() !== "" && prixNombre > 0 && stockNombre > 0;
 
   function handleCreer() {
-    if (!formulaireValide) return;
+    if (!formulaireValide || enCours) return;
 
+    setEnCours(true);
     ajouterProduit(id, {
       nom: nom.trim(),
       prixVente: prixNombre,
@@ -82,10 +84,10 @@ export default function NouveauProduitPage() {
         <Button
           variant="primary"
           onClick={handleCreer}
-          disabled={!formulaireValide}
+          disabled={!formulaireValide || enCours}
           className="w-full"
         >
-          Ajouter le produit
+          {enCours ? "Ajout..." : "Ajouter le produit"}
         </Button>
       </div>
     </div>

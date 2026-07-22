@@ -10,6 +10,7 @@ export default function NouveauBusinessPage() {
   const [nom, setNom] = useState("");
   const [capitalInvesti, setCapitalInvesti] = useState("");
   const [categorie, setCategorie] = useState("");
+  const [enCours, setEnCours] = useState(false);
   const { ajouterBusiness } = useAppData();
   const router = useRouter();
 
@@ -17,8 +18,9 @@ export default function NouveauBusinessPage() {
   const formulaireValide = nom.trim() !== "" && capitalNombre > 0 && categorie.trim() !== "";
 
   function handleCreer() {
-    if (!formulaireValide) return;
+    if (!formulaireValide || enCours) return;
 
+    setEnCours(true);
     ajouterBusiness({
       nom: nom.trim(),
       capitalInvesti: capitalNombre,
@@ -83,10 +85,10 @@ export default function NouveauBusinessPage() {
         <Button
           variant="primary"
           onClick={handleCreer}
-          disabled={!formulaireValide}
+          disabled={!formulaireValide || enCours}
           className="w-full"
         >
-          Créer le business
+          {enCours ? "Création..." : "Créer le business"}
         </Button>
       </div>
     </div>

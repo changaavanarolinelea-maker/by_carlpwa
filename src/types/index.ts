@@ -35,7 +35,6 @@ export type ProjetPersonnel = {
   epargne: number;
   priorite: "haute" | "moyenne" | "basse";
   prevuLe: string;
-  statut: StatutProjet;
 };
 
 export type StatutBusiness = "lancable" | "presque" | "attente";
