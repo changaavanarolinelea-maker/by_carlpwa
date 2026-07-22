@@ -14,7 +14,7 @@ export function BusinessCard({ projet }: { projet: BusinessProjet }) {
   const { variant, label } = statutConfig[projet.statut];
 
   return (
-    <Link href={`/business/${projet.id}`}>
+    <Link href={`/business/${projet.id}`} className="block">
       <Card>
         <div className="flex justify-between items-start mb-3">
           <h3 className="font-display text-headline-sm text-espresso">{projet.nom}</h3>

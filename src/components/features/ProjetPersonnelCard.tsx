@@ -8,17 +8,20 @@ import { calculerStatutProjet } from "@/lib/projets";
 import { useAppData } from "@/context/AppDataContext";
 import type { ProjetPersonnel } from "@/types";
 
-const statutConfig = {
+const statutStyle = {
   pret: {
-    variant: "success" as const,
+    fond: "bg-sage/10",
+    texte: "text-sage",
     message: "Tu peux acheter maintenant",
   },
   ralentit: {
-    variant: "warning" as const,
+    fond: "bg-ochre/10",
+    texte: "text-ochre",
     message: "Possible, mais cela ralentit ton projet business",
   },
   reporter: {
-    variant: "risk" as const,
+    fond: "bg-brick/10",
+    texte: "text-brick",
     message: "À reporter pour le moment",
   },
 };
@@ -29,38 +32,38 @@ export function ProjetPersonnelCard({ projet }: { projet: ProjetPersonnel }) {
   const reste = projet.objectif - projet.epargne;
   const progression = (projet.epargne / projet.objectif) * 100;
   const statut = calculerStatutProjet(projet, compte.argentDisponible);
-  const { variant, message } = statutConfig[statut];
+  const { fond, texte, message } = statutStyle[statut];
 
   return (
     <Card>
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="font-display text-headline-sm text-espresso">{projet.nom}</h3>
-          <div className="flex items-center gap-2 mt-2">
+      <div className="flex justify-between items-start mb-4 gap-3">
+        <div className="min-w-0">
+          <h3 className="font-display text-headline-sm text-espresso truncate">{projet.nom}</h3>
+          <div className="flex flex-wrap items-center gap-2 mt-2">
             <Badge variant="neutral">Priorité {projet.priorite}</Badge>
-            <span className="font-sans text-body-sm text-cocoa">
-              Prévu : {projet.prevuLe}
-            </span>
+            <span className="font-sans text-body-sm text-cocoa">Prévu : {projet.prevuLe}</span>
           </div>
         </div>
-        <p className="font-display text-headline-sm text-espresso">
+        <p className="font-display text-headline-sm text-espresso shrink-0">
           {formatFCFA(projet.objectif)}
         </p>
       </div>
 
-      <div className="flex justify-between mb-2">
+      <div className="flex justify-between mb-2 gap-3">
         <p className="font-sans text-body-sm text-cocoa">
-          Économisé : <span className="text-espresso font-semibold">{formatFCFA(projet.epargne)}</span>
+          Économisé :{" "}
+          <span className="text-espresso font-semibold">{formatFCFA(projet.epargne)}</span>
         </p>
-        <p className="font-sans text-body-sm text-cocoa">
-          Reste : <span className="text-espresso font-semibold">{formatFCFA(Math.max(reste, 0))}</span>
+        <p className="font-sans text-body-sm text-cocoa text-right">
+          Reste :{" "}
+          <span className="text-espresso font-semibold">{formatFCFA(Math.max(reste, 0))}</span>
         </p>
       </div>
       <ProgressBar value={progression} className="mb-4" />
 
-      <Badge variant={variant} className="w-full justify-center normal-case text-body-sm py-2">
-        {message}
-      </Badge>
+      <div className={`w-full rounded-control px-4 py-3 text-center ${fond}`}>
+        <p className={`font-sans text-body-sm font-medium leading-snug ${texte}`}>{message}</p>
+      </div>
     </Card>
   );
 }

@@ -38,7 +38,7 @@ export default function BusinessPage() {
           </Card>
         </div>
 
-        <Link href="/business/nouveau">
+        <Link href="/business/nouveau" className="block">
           <Button variant="primary" icon={<Plus size={20} />} className="w-full">
             Nouveau Business
           </Button>

@@ -42,7 +42,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 w-full z-50 bg-ivory border-t border-sand shadow-sm flex justify-around items-center px-4 pb-4 pt-2">
+    <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 bg-ivory border-t border-sand shadow-sm flex justify-around items-center px-4 pb-4 pt-2">
       {leftItems.map((item) => (
         <NavLink key={item.href} {...item} active={pathname === item.href} />
       ))}

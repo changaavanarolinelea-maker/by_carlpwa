@@ -19,7 +19,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`h-11 px-6 rounded-control font-sans font-semibold text-body-md flex items-center justify-center gap-2 transition-transform active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none disabled:active:scale-100 ${variantStyles[variant]} ${className}`}
+      className={`min-h-11 px-4 py-2.5 rounded-control font-sans font-semibold text-body-md text-center leading-snug flex items-center justify-center gap-2 transition-transform active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none disabled:active:scale-100 ${variantStyles[variant]} ${className}`}
       {...props}
     >
       {icon}

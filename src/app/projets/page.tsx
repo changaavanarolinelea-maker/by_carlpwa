@@ -20,7 +20,7 @@ export default function ProjetsPage() {
           <h2 className="font-display text-headline-md text-espresso">Projets Personnels</h2>
         </div>
 
-        <Link href="/projets/nouveau">
+        <Link href="/projets/nouveau" className="block">
           <Button variant="primary" icon={<Plus size={20} />} className="w-full">
             Nouveau Projet Personnel
           </Button>
