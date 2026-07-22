@@ -10,24 +10,29 @@
 - [x] Composants de base : Button, Card, Badge, ProgressBar, Header, BottomNav
 - [x] 6 pages du MVP construites
 - [x] État global partagé (`AppDataContext`) avec logique métier centralisée
-- [x] Fausse couche API (`fakeApi.ts`) simulant un futur backend
+- [x] Fausse couche API (`fakeApi.ts`) avec fusion défensive anti-perte de données
 - [x] Sauvegarde locale automatique (`localStorage`)
 - [x] Formulaire "Nouvelle Transaction" fonctionnel
-- [x] Accueil connecté aux vraies données
-- [x] Page Projets connectée aux vraies données
-- [x] Formulaire "Nouveau Projet Personnel" fonctionnel, avec validation
+- [x] Formulaire "Nouveau Projet Personnel" fonctionnel
+- [x] Business entièrement fonctionnel :
+  - [x] Création d'un business
+  - [x] Ajout de produits à un business
+  - [x] Enregistrement d'une vente (stock, historique, solde, % stock tous synchronisés)
+- [x] Toutes les pages lisent les vraies données via `useAppData()` (plus aucune ne lit `mock.ts` en dur pour l'affichage dynamique)
 
 ## En cours
-- [ ] Formulaire "Nouveau Business" / enregistrer une vente
+- [ ] Calcul automatique du statut des projets personnels (encore figé à "reporter" à la création)
 
 ## À venir
-- [ ] Calcul automatique du statut des projets personnels (basé sur l'épargne réelle vs objectif)
-- [ ] Page Business et Détail Business reconnectées aux vraies données (encore statiques)
-- [ ] Intégration Supabase
+- [ ] Profit prévu et vitesse de vente des business (encore figés, à calculer ou saisir)
+- [ ] Intégration Supabase (remplacement de `fakeApi.ts`, aucune page à modifier)
 - [ ] Déploiement en ligne
-- [ ] Fusion develop → main
+- [ ] Fusion develop → main (premier jalon stable livrable)
 
-## Notes
-Toute nouvelle page qui affiche des données modifiables doit utiliser `useAppData()`,
-jamais importer directement `src/data/mock.ts` — sinon les créations/modifications de
-l'utilisateur n'apparaîtront pas (bug rencontré et corrigé sur la page Projets).
+## Notes techniques importantes
+- Toute évolution future de la forme de `AppData` doit passer par une fusion défensive
+  dans `chargerDonnees()` (voir `src/lib/fakeApi.ts`) — jamais un remplacement brut,
+  pour ne pas perdre les données déjà sauvegardées chez l'utilisateur (bug rencontré
+  et corrigé sur `businessDetails`).
+- Composant serveur → `await params`. Composant client (`"use client"`) → `useParams()`.
+  Ne pas mélanger les deux approches sur une même route.
