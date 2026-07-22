@@ -1,18 +1,18 @@
+"use client";
+
+import { useParams } from "next/navigation";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ShoppingBag, Banknote, TrendingUp } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Banknote, TrendingUp,Plus } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { businessDetails} from "@/data/mock";
+import { useAppData } from "@/context/AppDataContext";
 import { formatFCFA } from "@/lib/format";
+import Link from "next/link";
 
-
-export default async function BusinessDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+export default function BusinessDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const { businessDetails, enregistrerVente, ajouterProduit } = useAppData();
   const detail = businessDetails[id];
 
   if (!detail) {
@@ -30,8 +30,7 @@ export default async function BusinessDetailPage({
         <h1 className="font-display text-display-lg-mobile text-espresso">{detail.nom}</h1>
       </header>
 
-      <div className="px-5 pb-40 space-y-6">
-        {/* Investissement initial */}
+      <div className="px-5 pb-16 space-y-6">
         <Card>
           <p className="font-sans text-label-md text-cocoa uppercase mb-1">
             Investissement initial
@@ -53,7 +52,6 @@ export default async function BusinessDetailPage({
           </div>
         </Card>
 
-        {/* Résumé financier */}
         <div className="space-y-4">
           <h2 className="font-display text-headline-sm text-espresso px-1">Résumé financier</h2>
 
@@ -73,7 +71,13 @@ export default async function BusinessDetailPage({
               <p className="font-display text-headline-sm text-espresso mb-3">
                 {formatFCFA(capitalRecupere)}
               </p>
-              <ProgressBar value={(capitalRecupere / detail.investissementInitial) * 100} />
+              <ProgressBar
+                value={
+                  detail.investissementInitial > 0
+                    ? (capitalRecupere / detail.investissementInitial) * 100
+                    : 0
+                }
+              />
             </Card>
 
             <Card className="p-4 bg-terracotta border-terracotta">
@@ -89,9 +93,21 @@ export default async function BusinessDetailPage({
           </div>
         </div>
 
-        {/* Inventaire */}
         <div className="space-y-4">
           <h2 className="font-display text-headline-sm text-espresso px-1">Inventaire</h2>
+
+      <Link href={`/business/${id}/nouveau-produit`}>
+       <Button variant="secondary" icon={<Plus size={18} />} className="w-full">
+         Ajouter un produit
+       </Button>
+      </Link>
+
+          {detail.produits.length === 0 && (
+            <p className="font-sans text-body-sm text-cocoa px-1">
+              Aucun produit pour l&apos;instant.
+            </p>
+          )}
+
           {detail.produits.map((produit) => {
             const stockRestantPourcent = (produit.stockRestant / produit.stockInitial) * 100;
             return (
@@ -117,12 +133,19 @@ export default async function BusinessDetailPage({
                   </div>
                   <ProgressBar value={stockRestantPourcent} />
                 </div>
+                <Button
+                  variant="primary"
+                  className="w-full mt-4"
+                  disabled={produit.stockRestant <= 0}
+                  onClick={() => enregistrerVente(id, produit.id)}
+                >
+                  {produit.stockRestant <= 0 ? "Rupture de stock" : "Vendre une pièce"}
+                </Button>
               </Card>
             );
           })}
         </div>
 
-        {/* Historique des ventes */}
         <div className="space-y-4">
           <h2 className="font-display text-headline-sm text-espresso px-1">
             Historique des ventes
@@ -154,12 +177,6 @@ export default async function BusinessDetailPage({
             ))}
           </Card>
         </div>
-      </div>
-
-      <div className="fixed bottom-24 left-0 w-full px-5 z-40">
-        <Button variant="primary" className="w-full h-14 text-lg shadow-xl shadow-terracotta/30">
-          Vendre maintenant
-        </Button>
       </div>
     </div>
   );

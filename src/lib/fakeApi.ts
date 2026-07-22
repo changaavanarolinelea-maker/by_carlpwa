@@ -1,9 +1,16 @@
-import type { Compte, Transaction, ProjetPersonnel, BusinessProjet } from "@/types";
+import type {
+  Compte,
+  Transaction,
+  ProjetPersonnel,
+  BusinessProjet,
+  BusinessDetail,
+} from "@/types";
 import {
   compte as compteSeed,
   transactionsRecentes as transactionsSeed,
   projetsPersonnels as projetsSeed,
-  businessProjets as businessSeed,
+  businessProjets as businessProjetsSeed,
+  businessDetails as businessDetailsSeed,
 } from "@/data/mock";
 
 export type AppData = {
@@ -11,6 +18,7 @@ export type AppData = {
   transactions: Transaction[];
   projetsPersonnels: ProjetPersonnel[];
   businessProjets: BusinessProjet[];
+  businessDetails: Record<string, BusinessDetail>;
 };
 
 const CLE_STOCKAGE = "by-carl-data";
@@ -25,21 +33,53 @@ function donneesSeed(): AppData {
     compte: compteSeed,
     transactions: transactionsSeed,
     projetsPersonnels: projetsSeed,
-    businessProjets: businessSeed,
+    businessProjets: businessProjetsSeed,
+    businessDetails: businessDetailsSeed,
   };
+}
+
+function fusionnerListeParId<T extends { id: string }>(
+  listeSeed: T[],
+  listeSauvegardee: T[] | undefined
+): T[] {
+  const table = new Map<string, T>();
+  listeSeed.forEach((item) => table.set(item.id, item));
+  (listeSauvegardee ?? []).forEach((item) => table.set(item.id, item));
+  return Array.from(table.values());
 }
 
 export async function chargerDonnees(): Promise<AppData> {
   await attendre(DELAI_RESEAU_MS);
 
+  const seed = donneesSeed();
   const sauvegarde = window.localStorage.getItem(CLE_STOCKAGE);
-  if (sauvegarde) {
-    return JSON.parse(sauvegarde) as AppData;
+
+  if (!sauvegarde) {
+    window.localStorage.setItem(CLE_STOCKAGE, JSON.stringify(seed));
+    return seed;
   }
 
-  const donnees = donneesSeed();
-  window.localStorage.setItem(CLE_STOCKAGE, JSON.stringify(donnees));
-  return donnees;
+  const donneesSauvegardees = JSON.parse(sauvegarde) as Partial<AppData>;
+
+  const donneesFusionnees: AppData = {
+    compte: donneesSauvegardees.compte ?? seed.compte,
+    transactions: donneesSauvegardees.transactions ?? seed.transactions,
+    projetsPersonnels: fusionnerListeParId(
+      seed.projetsPersonnels,
+      donneesSauvegardees.projetsPersonnels
+    ),
+    businessProjets: fusionnerListeParId(
+      seed.businessProjets,
+      donneesSauvegardees.businessProjets
+    ),
+    businessDetails: {
+      ...seed.businessDetails,
+      ...(donneesSauvegardees.businessDetails ?? {}),
+    },
+  };
+
+  window.localStorage.setItem(CLE_STOCKAGE, JSON.stringify(donneesFusionnees));
+  return donneesFusionnees;
 }
 
 export async function sauvegarderDonnees(donnees: AppData): Promise<void> {
