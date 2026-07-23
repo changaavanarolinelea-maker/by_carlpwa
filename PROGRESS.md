@@ -17,17 +17,17 @@
 - [x] Business entièrement fonctionnel (création, produits, ventes)
 - [x] Statut des projets personnels calculé dynamiquement
 - [x] Protection anti double-soumission sur les 4 formulaires
-- [x] Mise en page responsive : navigation basse sur mobile, barre latérale fixe sur
-      desktop (dès 768px), largeur de contenu contenue pour rester lisible sur grand écran
+- [x] Mise en page responsive (nav basse mobile, barre latérale desktop)
+- [x] PWA installable : manifest.json, icônes, service worker minimal
+- [x] Écran de démarrage (splash screen)
 
 ## En cours
-- (rien en cours actuellement)
+- [ ] Amélioration visuelle générale (profondeur, mouvement, effets 3D discrets)
 
 ## À venir
-- [ ] Profit prévu et vitesse de vente des business (encore figés, à calculer ou saisir)
-- [ ] Centraliser la règle "quelle nature de flux est une sortie d'argent"
+- [ ] Intégration d'images de fond (en attente des images de l'utilisateur)
+- [ ] Profit prévu et vitesse de vente des business (encore figés)
 - [ ] Intégration Supabase
-- [ ] Configuration PWA (manifest, icônes, installabilité)
 - [ ] Déploiement en ligne
 - [ ] Fusion develop → main (premier jalon stable livrable)
 
@@ -37,8 +37,7 @@
 - Composant serveur → `await params`. Composant client → `useParams()`.
 - Les statuts dérivés d'un calcul ne doivent jamais être stockés en dur.
 - Tout formulaire de création doit avoir un state `enCours`.
-- Un `Link` de Next.js est une balise `<a>` inline par défaut : s'il enveloppe un
-  bouton, une carte, ou tout élément avec de l'espacement vertical autour
-  (`space-y-*`), il a besoin de `className="block"`, sinon les marges sont ignorées.
-- Breakpoint responsive choisi : `md:` (768px) sépare l'expérience mobile (nav basse)
-  de l'expérience desktop (barre latérale). Contenu limité à `max-w-xl` (576px).
+- Un `Link` enveloppant un bouton/carte a besoin de `className="block"`.
+- Breakpoint responsive : `md:` (768px) sépare mobile (nav basse) et desktop (sidebar).
+- `sessionStorage` (pas `localStorage`) pour tout ce qui doit se réinitialiser à
+  chaque nouvelle ouverture de l'app (ex: splash screen), pas persister indéfiniment.
