@@ -22,7 +22,7 @@ export type AppData = {
 };
 
 const CLE_STOCKAGE = "by-carl-data";
-const DELAI_RESEAU_MS = 300;
+const DELAI_RESEAU_MS = 400;
 
 function attendre(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

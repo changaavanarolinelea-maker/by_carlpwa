@@ -6,6 +6,8 @@ import { ArrowDownCircle, ArrowUpCircle, PiggyBank, Tag } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/Button";
 import { useAppData } from "@/context/AppDataContext";
+import { useToast } from "@/context/ToastContext";
+import { SlideUpContent } from "@/components/layout/SlideUpContent";
 
 type NatureFlux = "entree" | "depense" | "epargne" | "vente";
 
@@ -21,28 +23,30 @@ export default function AjouterPage() {
   const [nature, setNature] = useState<NatureFlux>("entree");
   const [note, setNote] = useState("");
   const [enCours, setEnCours] = useState(false);
-  const { ajouterTransaction , compte } = useAppData();
+  const { ajouterTransaction, compte } = useAppData();
   const router = useRouter();
+  const { afficherToast } = useToast();
+
   const montantNombre = Number(montant);
   const estUneSortie = nature === "depense" || nature === "epargne";
   const soldeInsuffisant = estUneSortie && montantNombre > compte.argentDisponible;
   const formulaireValide = montantNombre > 0 && !soldeInsuffisant;
 
-function handleConfirmer() {
-  if (!formulaireValide || enCours) return;
-  setEnCours(true);
-  ajouterTransaction(nature, montantNombre, note);
-  router.push("/");
-}
+  function handleConfirmer() {
+    if (!formulaireValide || enCours) return;
+
+    setEnCours(true);
+    ajouterTransaction(nature, montantNombre, note);
+    afficherToast("Transaction enregistrée avec succès");
+    router.push("/");
+  }
 
   return (
     <div>
-      <Header />
+      <Header title="Nouvelle Transaction" showBack />
 
-      <div className="px-5 space-y-6">
-        <h2 className="font-display text-headline-md text-espresso">Nouvelle Transaction</h2>
-
-        <div className="bg-ivory border border-sand rounded-card p-6 text-center">
+      <SlideUpContent className="px-4 sm:px-5 space-y-4 md:space-y-6 mt-6 md:max-w-xl md:mx-auto">
+        <div className="bg-ivory border border-sand rounded-card p-4 sm:p-6 text-center">
           <p className="font-sans text-label-md text-cocoa uppercase mb-2">Montant</p>
           <div className="flex items-center justify-center gap-2">
             <input
@@ -66,8 +70,10 @@ function handleConfirmer() {
                 <button
                   key={value}
                   onClick={() => setNature(value)}
-                  className={`p-4 rounded-control border text-left transition-colors bg-ivory ${
-                    active ? "border-terracotta" : "border-sand"
+                  className={`p-4 rounded-control border text-left bg-ivory transition-all duration-200 active:scale-[0.97] ${
+                    active
+                      ? "border-terracotta shadow-soft"
+                      : "border-sand hover:border-terracotta/40 hover:shadow-soft"
                   }`}
                 >
                   <Icon
@@ -92,25 +98,26 @@ function handleConfirmer() {
             onChange={(e) => setNote(e.target.value)}
             placeholder="Ex: Déjeuner d'affaires avec Client X"
             rows={4}
-            className="w-full bg-ivory border border-sand rounded-control p-4 font-sans text-body-md text-espresso outline-none focus:border-terracotta placeholder:text-cocoa/50"
+            className="w-full bg-ivory border border-sand rounded-control p-4 font-sans text-body-md text-espresso outline-none transition-all duration-200 focus:border-terracotta focus:shadow-soft placeholder:text-cocoa/50"
           />
         </div>
+
         <div>
-           <Button
-             variant="primary"
-             onClick={handleConfirmer}
-             disabled={!formulaireValide || enCours}
-             className="w-full"
-            >
-            Confirmer
+          <Button
+            variant="primary"
+            onClick={handleConfirmer}
+            disabled={!formulaireValide || enCours}
+            className="w-full"
+          >
+            {enCours ? "Enregistrement..." : "Confirmer"}
           </Button>
-            {soldeInsuffisant && (
-          <p className="font-sans text-body-sm text-brick mt-3 text-center">
-           Solde insuffisant : il te reste {compte.argentDisponible.toLocaleString("fr-FR")} FCFA disponible.
-          </p>
+          {soldeInsuffisant && (
+            <p className="font-sans text-body-sm text-brick mt-3 text-center">
+              Solde insuffisant : il te reste {compte.argentDisponible.toLocaleString("fr-FR")} FCFA disponible.
+            </p>
           )}
-        </div>    
-      </div>
+        </div>
+      </SlideUpContent>
     </div>
   );
 }

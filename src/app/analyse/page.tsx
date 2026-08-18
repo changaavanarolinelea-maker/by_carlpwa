@@ -1,3 +1,4 @@
+"use client";
 import { ArrowUp, Sparkles, Lightbulb } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Card } from "@/components/ui/Card";
@@ -8,6 +9,7 @@ import {
   conseilsAnalyse,
 } from "@/data/mock";
 import { formatFCFA } from "@/lib/format";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
 
 const conseilStyle = {
@@ -27,11 +29,13 @@ export default function AnalysePage() {
     <div>
       <Header title="Analyse de Carl" />
 
-      <div className="px-5 space-y-6">
+      <div className="px-5 space-y-6 mt-6 md:max-w-xl md:mx-auto">
         {/* Bénéfice mensuel */}
         <Card className="text-center relative overflow-hidden">
           <p className="font-sans text-label-md text-cocoa uppercase mb-2">Bénéfice mensuel</p>
-          <h2 className="font-sans text-number-xl text-espresso">{formatFCFA(profitMensuel)}</h2>
+          <h2 className="font-sans text-number-xl text-espresso">
+  <AnimatedNumber value={profitMensuel} formatter={formatFCFA} />
+</h2>
           <div className="inline-flex items-center gap-1 mt-3 text-sage bg-sage/10 px-3 py-1 rounded-full font-sans text-label-md">
             <ArrowUp size={14} strokeWidth={2} />
             <span>+{profitVariationPourcent}% vs mois dernier</span>

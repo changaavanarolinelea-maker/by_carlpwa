@@ -9,6 +9,11 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useAppData } from "@/context/AppDataContext";
 import { formatFCFA } from "@/lib/format";
 import { conseilDuJour, projetPersonnelApercu, businessApercu } from "@/data/mock";
+import { Reveal } from "@/components/ui/Reveal";
+import { TiltCard } from "@/components/ui/TiltCard";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
+
+
 
 export default function AccueilPage() {
   const { compte, transactions } = useAppData();
@@ -19,12 +24,12 @@ export default function AccueilPage() {
     <div>
       <Header variant="home" />
 
-      <div className="px-5 space-y-6">
+      <div className="px-5 space-y-6 mt-6 md:max-w-xl md:mx-auto">
         {/* Argent disponible */}
         <Card>
           <p className="font-sans text-label-md text-cocoa uppercase mb-1">Argent disponible</p>
           <h2 className="font-display text-display-lg-mobile text-espresso mb-6">
-            {formatFCFA(compte.argentDisponible)}
+            <AnimatedNumber value={compte.argentDisponible} formatter={formatFCFA} />
           </h2>
           <div className="flex items-center gap-4 pt-6 border-t border-sand">
             <div className="w-10 h-10 rounded-full bg-cream flex items-center justify-center">
@@ -40,6 +45,7 @@ export default function AccueilPage() {
         </Card>
 
         {/* Conseil du jour */}
+        <TiltCard>
         <div className="bg-espresso rounded-card p-6 flex items-center justify-between">
           <div className="space-y-2 max-w-[70%]">
             <span className="inline-block px-3 py-1 rounded-full bg-terracotta/20 text-cream font-sans text-label-md">
@@ -53,20 +59,28 @@ export default function AccueilPage() {
             <TrendingUp className="text-cream" size={28} strokeWidth={1.5} />
           </div>
         </div>
+        </TiltCard>
 
-        {/* Actions rapides */}
-        <div className="flex gap-4">
-          <Link href="/ajouter" className="flex-1">
-            <Button variant="primary" icon={<Banknote size={20} />} className="w-full">
-              Vendre maintenant
-            </Button>
-          </Link>
-          <Link href="/ajouter" className="flex-1">
-            <Button variant="secondary" icon={<Plus size={20} />} className="w-full">
-              Ajouter de l&apos;argent
-            </Button>
-          </Link>
-        </div>
+{/* Actions rapides — icônes seules sur mobile, boutons complets sur desktop */}
+<Link href="/ajouter" className="block">
+  <button className="w-full min-h-11 flex items-center justify-center gap-2 bg-terracotta text-ivory rounded-control py-3 font-sans font-semibold text-body-md shadow-soft transition-all duration-200 hover:shadow-glow-terracotta hover:brightness-105 active:scale-[0.98]">
+    <Plus size={18} strokeWidth={2} />
+    Nouvelle transaction
+  </button>
+</Link>
+
+<div className="hidden sm:flex gap-4">
+  <Link href="/ajouter" className="flex-1">
+    <Button variant="primary" icon={<Banknote size={20} />} className="w-full">
+      Vendre maintenant
+    </Button>
+  </Link>
+  <Link href="/ajouter" className="flex-1">
+    <Button variant="secondary" icon={<Plus size={20} />} className="w-full">
+      Ajouter de l&apos;argent
+    </Button>
+  </Link>
+</div>
 
         {/* Aperçus projets */}
         <div className="grid grid-cols-2 gap-4">
@@ -107,16 +121,18 @@ export default function AccueilPage() {
         <div>
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-display text-headline-sm text-espresso">Activités récentes</h3>
-            <button className="font-sans text-label-md text-cocoa">Voir tout</button>
+<button className="font-sans text-label-md text-cocoa transition-colors duration-200 hover:text-terracotta">
+  Voir tout
+</button>
           </div>
           <div className="space-y-1">
             {transactions.length === 0 && (
               <p className="py-4 font-sans text-body-sm text-cocoa">Aucune transaction pour l&apos;instant.</p>
             )}
-            {transactions.slice(0, 5).map((transaction) => (
+            {transactions.slice(0, 5).map((transaction, index) => (
+             <Reveal key={transaction.id} index={index}>
               <div
-                key={transaction.id}
-                className="flex items-center justify-between py-4 border-b border-sand"
+                className="flex items-center justify-between p-4 mb-2 rounded-control bg-ivory border border-sand shadow-soft transition-all duration-200 hover:shadow-elevated hover:-translate-y-0.5 hover:border-terracotta/30"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-cream flex items-center justify-center">
@@ -140,6 +156,7 @@ export default function AccueilPage() {
                   {formatFCFA(transaction.montant)}
                 </p>
               </div>
+              </Reveal> 
             ))}
           </div>
         </div>

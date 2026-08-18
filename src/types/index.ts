@@ -35,6 +35,10 @@ export type ProjetPersonnel = {
   epargne: number;
   priorite: "haute" | "moyenne" | "basse";
   prevuLe: string;
+  archive?: boolean;
+  supprimeLe?: string;
+  imageUrl?: string;
+  
 };
 
 export type StatutBusiness = "lancable" | "presque" | "attente";
@@ -47,6 +51,8 @@ export type BusinessProjet = {
   stockRestantPourcent: number;
   vitesseVente: number; // de 0 à 5
   statut: StatutBusiness;
+  archive?: boolean;
+  supprimeLe?: string;
 };
 
 export type Produit = {
@@ -55,6 +61,7 @@ export type Produit = {
   prixVente: number;
   stockRestant: number;
   stockInitial: number;
+  imageUrl?: string;
 };
 
 export type Vente = {

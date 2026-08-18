@@ -1,56 +1,74 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, Wallet, TrendingUp } from "lucide-react";
 import { Header } from "@/components/layout/Header";
-import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { StatCard } from "@/components/ui/StatCard";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 import { BusinessCard } from "@/components/features/BusinessCard";
+import { Reveal } from "@/components/ui/Reveal";
 import { useAppData } from "@/context/AppDataContext";
 import { formatFCFA } from "@/lib/format";
 
 export default function BusinessPage() {
   const { businessProjets } = useAppData();
+  const [recherche, setRecherche] = useState("");
 
-  const capitalTotal = businessProjets.reduce((total, p) => total + p.capitalInvesti, 0);
-  const profitTotal = businessProjets.reduce((total, p) => total + p.profitPrevu, 0);
+  const businessActifs = businessProjets.filter((p) => !p.archive && !p.supprimeLe);
+  const businessFiltres = businessActifs.filter((p) =>
+    p.nom.toLowerCase().includes(recherche.toLowerCase())
+  );
+
+  const capitalTotal = businessActifs.reduce((total, p) => total + p.capitalInvesti, 0);
+  const profitTotal = businessActifs.reduce((total, p) => total + p.profitPrevu, 0);
 
   return (
     <div>
-      <Header />
+      <Header
+        title="Mes Business"
+        showBack
+        recherche={{ valeur: recherche, onChange: setRecherche, placeholder: "Rechercher un business..." }}
+      />
 
-      <div className="px-5 space-y-6">
-        <div>
-          <h2 className="font-display text-headline-md text-espresso mb-1">Mes Business</h2>
-          <p className="font-sans text-body-md text-cocoa">
-            Vue d&apos;ensemble de vos investissements et stocks actifs.
-          </p>
-        </div>
+      <div className="px-4 sm:px-5 space-y-4 md:space-y-6 mt-6 md:max-w-xl md:mx-auto">
+        <p className="font-sans text-body-md text-cocoa">
+          Vue d&apos;ensemble de vos investissements et stocks actifs.
+        </p>
 
-        <div className="grid grid-cols-2 gap-4">
-          <Card className="p-4">
-            <p className="font-sans text-label-md text-cocoa uppercase mb-1">Capital total</p>
-            <p className="font-display text-headline-sm text-espresso">{formatFCFA(capitalTotal)}</p>
-          </Card>
-          <Card className="p-4">
-            <p className="font-sans text-label-md text-cocoa uppercase mb-1">Profit prévu total</p>
-            <p className="font-display text-headline-sm text-terracotta">{formatFCFA(profitTotal)}</p>
-          </Card>
+        <div className="grid grid-cols-2 gap-3">
+          <StatCard
+            label="Capital total"
+            value={<AnimatedNumber value={capitalTotal} formatter={formatFCFA} />}
+            icon={<Wallet size={18} className="text-cocoa" strokeWidth={1.5} />}
+          />
+          <StatCard
+            label="Profit prévu"
+            value={<AnimatedNumber value={profitTotal} formatter={formatFCFA} />}
+            accent="terracotta"
+            icon={<TrendingUp size={18} className="text-terracotta" strokeWidth={1.5} />}
+          />
         </div>
 
         <Link href="/business/nouveau" className="block">
           <Button variant="primary" icon={<Plus size={20} />} className="w-full">
-            Nouveau Business
+            <span className="sm:hidden">Nouveau</span>
+            <span className="hidden sm:inline">Nouveau Business</span>
           </Button>
         </Link>
 
-        {businessProjets.length === 0 && (
-          <p className="font-sans text-body-sm text-cocoa">Aucun business pour l&apos;instant.</p>
+        {businessFiltres.length === 0 && (
+          <p className="font-sans text-body-sm text-cocoa">
+            {recherche ? "Aucun business ne correspond à ta recherche." : "Aucun business pour l'instant."}
+          </p>
         )}
 
         <div className="space-y-4">
-          {businessProjets.map((projet) => (
-            <BusinessCard key={projet.id} projet={projet} />
+          {businessFiltres.map((projet, index) => (
+            <Reveal key={projet.id} index={index}>
+              <BusinessCard projet={projet} />
+            </Reveal>
           ))}
         </div>
       </div>

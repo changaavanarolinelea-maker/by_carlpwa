@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/Button";
 import { useAppData } from "@/context/AppDataContext";
+import { useToast } from "@/context/ToastContext";
+import { SlideUpContent } from "@/components/layout/SlideUpContent";
 
 export default function NouveauBusinessPage() {
   const [nom, setNom] = useState("");
@@ -12,6 +14,7 @@ export default function NouveauBusinessPage() {
   const [categorie, setCategorie] = useState("");
   const [enCours, setEnCours] = useState(false);
   const { ajouterBusiness } = useAppData();
+  const { afficherToast } = useToast();
   const router = useRouter();
 
   const capitalNombre = Number(capitalInvesti);
@@ -26,15 +29,15 @@ export default function NouveauBusinessPage() {
       capitalInvesti: capitalNombre,
       categorie: categorie.trim(),
     });
-
+    afficherToast(`Business "${nom.trim()}" créé avec succès`);
     router.push("/business");
   }
 
   return (
     <div>
-      <Header title="Nouveau Business" />
+      <Header title="Nouveau Business" showBack />
 
-      <div className="px-5 space-y-6">
+      <SlideUpContent className="px-4 sm:px-5 space-y-4 md:space-y-6 mt-6 md:max-w-xl md:mx-auto">
         <div>
           <label htmlFor="nom" className="font-sans text-label-md text-cocoa uppercase mb-2 block">
             Nom du business
@@ -45,7 +48,7 @@ export default function NouveauBusinessPage() {
             value={nom}
             onChange={(e) => setNom(e.target.value)}
             placeholder="Ex: Vente de bijoux"
-            className="w-full bg-ivory border border-sand rounded-control p-4 font-sans text-body-md text-espresso outline-none focus:border-terracotta placeholder:text-cocoa/50"
+            className="w-full bg-ivory border border-sand rounded-control p-4 font-sans text-body-md text-espresso outline-none transition-all duration-200 focus:border-terracotta focus:shadow-soft placeholder:text-cocoa/50"
           />
         </div>
 
@@ -60,7 +63,7 @@ export default function NouveauBusinessPage() {
             value={capitalInvesti}
             onChange={(e) => setCapitalInvesti(e.target.value)}
             placeholder="0"
-            className="w-full bg-ivory border border-sand rounded-control p-4 font-sans text-body-md text-espresso outline-none focus:border-terracotta placeholder:text-cocoa/50"
+            className="w-full bg-ivory border border-sand rounded-control p-4 font-sans text-body-md text-espresso outline-none transition-all duration-200 focus:border-terracotta focus:shadow-soft placeholder:text-cocoa/50"
           />
         </div>
 
@@ -74,7 +77,7 @@ export default function NouveauBusinessPage() {
             value={categorie}
             onChange={(e) => setCategorie(e.target.value)}
             placeholder="Ex: Beauté, Mode, Accessoires..."
-            className="w-full bg-ivory border border-sand rounded-control p-4 font-sans text-body-md text-espresso outline-none focus:border-terracotta placeholder:text-cocoa/50"
+            className="w-full bg-ivory border border-sand rounded-control p-4 font-sans text-body-md text-espresso outline-none transition-all duration-200 focus:border-terracotta focus:shadow-soft placeholder:text-cocoa/50"
           />
         </div>
 
@@ -90,7 +93,7 @@ export default function NouveauBusinessPage() {
         >
           {enCours ? "Création..." : "Créer le business"}
         </Button>
-      </div>
+      </SlideUpContent>
     </div>
   );
 }
