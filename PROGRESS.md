@@ -1,43 +1,48 @@
 # Avancement — By_Carl
 
 ## Fait
-- [x] Charte graphique définie
-- [x] Maquettes Stitch validées (6 écrans)
-- [x] Dépôt Git initialisé, connecté à GitHub, GitFlow en place
-- [x] Squelette Next.js + TypeScript + Tailwind généré
-- [x] Documentation projet (README, ARCHITECTURE, PROGRESS)
-- [x] Couleurs, typographies et arrondis configurés
-- [x] Composants de base : Button, Card, Badge, ProgressBar, Header, BottomNav, Sidebar
-- [x] 6 pages du MVP construites
-- [x] État global partagé (`AppDataContext`) avec logique métier centralisée
-- [x] Fausse couche API (`fakeApi.ts`) avec fusion défensive anti-perte de données
-- [x] Sauvegarde locale automatique (`localStorage`)
-- [x] Formulaire "Nouvelle Transaction" fonctionnel, avec blocage si solde insuffisant
-- [x] Formulaire "Nouveau Projet Personnel" fonctionnel
-- [x] Business entièrement fonctionnel (création, produits, ventes)
-- [x] Statut des projets personnels calculé dynamiquement
-- [x] Protection anti double-soumission sur les 4 formulaires
-- [x] Mise en page responsive (nav basse mobile, barre latérale desktop)
-- [x] PWA installable : manifest.json, icônes, service worker minimal
-- [x] Écran de démarrage (splash screen)
+- [x] Projet Next.js/TypeScript/Tailwind avec architecture propre et documentée
+- [x] 6 pages du MVP + Profil, entièrement fonctionnelles
+- [x] État global partagé, sauvegarde locale, fausse couche API prête pour Supabase
+- [x] Formulaires (Transaction, Projet, Business, Produit) fonctionnels avec validation,
+      protection anti double-soumission, et calendrier personnalisé
+- [x] Statuts de projets calculés dynamiquement, jamais stockés en dur
+- [x] Business fonctionnel : création, produits (avec photo), ventes, recherche
+- [x] Système de suppression douce : archivage + corbeille avec purge auto à 30 jours
+- [x] Page Profil : statistiques d'évolution, archives, corbeille — accessible partout
+      (Sidebar desktop, bouton flottant mobile)
+- [x] PWA installable (manifest, icônes, service worker, splash screen)
+- [x] Design responsive complet : Sidebar desktop fixe, nav mobile, typographie fluide
+- [x] Système de micro-interactions cohérent (hover/press/focus) sur tous les éléments
+- [x] Chargement progressif : skeletons + apparition en cascade
+- [x] Transitions de page directionnelles (formulaires depuis le bas, détails depuis la droite)
+- [x] Toasts de confirmation stylisés sur chaque action
+- [x] Page 404 personnalisée
+- [x] Images pour projets personnels et produits (stockage localStorage compressé,
+      limite temporaire en attendant Supabase)
+- [x] Vue scindée Détail Business : panneau d'analyse (ventes, produits populaires/stagnants)
 
 ## En cours
-- [ ] Amélioration visuelle générale (profondeur, mouvement, effets 3D discrets)
+- (à confirmer après tests de la vue scindée)
 
 ## À venir
-- [ ] Intégration d'images de fond (en attente des images de l'utilisateur)
-- [ ] Profit prévu et vitesse de vente des business (encore figés)
-- [ ] Intégration Supabase
+- [ ] Vraie fonctionnalité "Modifier" sur les projets et business (actuellement un bouton inactif)
+- [ ] Authentification (mentionnée comme prochaine étape par l'utilisateur)
+- [ ] Intégration Supabase — remplacera fakeApi.ts ET le stockage d'images localStorage
 - [ ] Déploiement en ligne
 - [ ] Fusion develop → main (premier jalon stable livrable)
 
-## Notes techniques importantes
-- Toute évolution future de la forme de `AppData` doit passer par une fusion défensive
-  dans `chargerDonnees()` (voir `src/lib/fakeApi.ts`).
+## Notes techniques importantes (cumulées)
+- Toute évolution de la forme de `AppData` doit passer par une fusion défensive dans
+  `chargerDonnees()` (`src/lib/fakeApi.ts`).
 - Composant serveur → `await params`. Composant client → `useParams()`.
-- Les statuts dérivés d'un calcul ne doivent jamais être stockés en dur.
-- Tout formulaire de création doit avoir un state `enCours`.
 - Un `Link` enveloppant un bouton/carte a besoin de `className="block"`.
-- Breakpoint responsive : `md:` (768px) sépare mobile (nav basse) et desktop (sidebar).
-- `sessionStorage` (pas `localStorage`) pour tout ce qui doit se réinitialiser à
-  chaque nouvelle ouverture de l'app (ex: splash screen), pas persister indéfiniment.
+- Un `transform` (translate, scale...) sur un ancêtre casse `position: sticky` de ses
+  enfants — utiliser `position: fixed` pour les barres qui doivent rester réellement fixes.
+- Les statuts dérivés d'un calcul ne sont jamais stockés, toujours recalculés à l'affichage.
+- Suppression = douce (`supprimeLe` horodaté), jamais un retrait direct des données —
+  la vraie suppression n'a lieu qu'après 30 jours (purge auto) ou action explicite en corbeille.
+- Images stockées en base64 compressé dans localStorage — limite ~5-10 Mo au total,
+  à surveiller ; solution définitive prévue avec Supabase Storage.
+- `sessionStorage` pour tout ce qui doit se réinitialiser à chaque nouvelle session
+  (splash screen), jamais `localStorage`.
